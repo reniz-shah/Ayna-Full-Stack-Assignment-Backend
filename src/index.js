@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   /**
@@ -16,5 +16,32 @@ module.exports = {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap(/*{ strapi }*/) {},
+  bootstrap({ strapi }) {
+    let interval;
+    var io = require("socket.io")(strapi.server.httpServer, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+      },
+    });
+
+    io.on("connection", function (socket) {
+      if (interval) clearInterval(interval);
+      console.log("User connected");
+      io.emit("Connection Establish Succwssfully!!");
+      socket.on("message", async (data) => {
+        console.log(data);
+        io.emit(`message: ${data}`);
+      });
+
+
+      socket.on("disconnect", () => {
+        console.log("user disconnected");
+        clearInterval(interval);
+      });
+    });
+
+    //Make the socket global
+    strapi.io = io;
+  },
 };

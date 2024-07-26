@@ -1,5 +1,5 @@
 {
-  "name": "chat-backend",
+  "name": "backend",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -11,22 +11,22 @@
     "deploy": "strapi deploy"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "4.25.4",
-    "@strapi/plugin-i18n": "4.25.4",
-    "@strapi/plugin-users-permissions": "4.25.4",
-    "@strapi/strapi": "4.25.4",
+    "@strapi/plugin-cloud": "4.25.5",
+    "@strapi/plugin-i18n": "4.25.5",
+    "@strapi/plugin-users-permissions": "4.25.5",
+    "@strapi/strapi": "4.25.5",
     "better-sqlite3": "8.6.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
-    "styled-components": "5.3.3",
-    "ws": "^8.18.0"
+    "socket.io": "^4.7.5",
+    "styled-components": "5.3.3"
   },
   "author": {
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "315ce3c1-93ab-48da-9004-eca65d7a1c68"
+    "uuid": "593c627c-135b-481b-a6a1-24deaa587d62"
   },
   "engines": {
     "node": ">=18.0.0 <=20.x.x",
