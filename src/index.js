@@ -29,11 +29,47 @@ module.exports = {
       if (interval) clearInterval(interval);
       console.log("User connected");
       io.emit("Connection Establish Succwssfully!!");
-      socket.on("message", async (data) => {
-        console.log(data);
-        io.emit(`message: ${data}`);
-      });
 
+      socket.on("sendMessage", async (message) => {
+        try {
+          if (message.user.id) {
+            const messageExists = await strapi.db
+              .query("api::message.message")
+              .findOne({
+                where: { users_permissions_user: parseInt(message.user.id) },
+              });
+
+            if (!messageExists) {
+              await strapi.db.query("api::message.message").create({
+                data: {
+                  messages: [message.message],
+                  users_permissions_user: parseInt(message.user.id),
+                  publishedAt: new Date(),  
+                },
+              });
+              io.emit("receiveMessage", [message.message]);
+              console.log("Message saved to database");
+              return;
+            } else {
+              await strapi.db.query("api::message.message").update({
+                where: { users_permissions_user: parseInt(message.user.id) },
+                data: {
+                  messages: [...messageExists.messages, message.message],
+                  publishedAt: new Date(),  
+                },
+              });
+              console.log("Message saved to database");
+              io.emit("receiveMessage", [
+                ...messageExists.messages,
+                message.message,
+              ]);
+              return;
+            }
+          }
+        } catch (error) {
+          console.error("Error saving message to database", error);
+        }
+      });
 
       socket.on("disconnect", () => {
         console.log("user disconnected");
